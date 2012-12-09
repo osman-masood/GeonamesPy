@@ -67,11 +67,11 @@ class Geonames():
         unzipped_file_array = []
         unzipped_files = []
         for name in zfobj.namelist():
-            print "name in zfobj", name
+            # print "name in zfobj", name
             if "readme" not in name:
                 unzipped_file = StringIO.StringIO()
                 filename = "%s.txt" % country_code
-                print "filename", filename
+                # print "filename", filename
                 read_data = zfobj.read(filename)
                 # print read_data
                 unzipped_files.append(read_data)
