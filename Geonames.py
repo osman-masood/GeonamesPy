@@ -50,8 +50,13 @@ class Geonames():
         for index, column_name in enumerate(self._columns):
             self._column_to_index[column_name] = index
 
+    def get_all_cities(self, country_code="US", columns=[]):
+        return self.get_features_dump(country_code=country_code, columns=columns, feature_code_filters='PPL')
+
     # country_code = None gets all country data. columns are the required columns, [] is all countries
-    def get_country_data(self, country_code="US", columns=[]):
+    # feature_code_filters is array of feature codes, or empty is all: http://download.geonames.org/export/dump/featureCodes_en.txt
+    # if feature_code_filters is string, will match all feature codes with it as a substring, i.e. "PPL" will get "PPLA", "PPLA2", etc.
+    def get_features_dump(self, country_code="US", columns=[], feature_code_filters=[]):
         country_code = country_code.upper()
         # Query URL
         url = "%s%s.zip" % (self._base_url, country_code) if country_code else "allCountries.zip"
@@ -64,19 +69,19 @@ class Geonames():
 
         # Unzip file and store data files in array
         zfobj = zipfile.ZipFile(output_file)
-        unzipped_file_array = []
+        #unzipped_file_array = []
         unzipped_files = []
         for name in zfobj.namelist():
             # print "name in zfobj", name
             if "readme" not in name:
-                unzipped_file = StringIO.StringIO()
+                #unzipped_file = StringIO.StringIO()
                 filename = "%s.txt" % country_code
                 # print "filename", filename
                 read_data = zfobj.read(filename)
                 # print read_data
                 unzipped_files.append(read_data)
-                unzipped_file.write(read_data)
-                unzipped_file_array.append(unzipped_file)
+                #unzipped_file.write(read_data)
+                #unzipped_file_array.append(unzipped_file)
         zfobj.close()
         output_file.close()
 
@@ -88,7 +93,21 @@ class Geonames():
             rows = unzipped_file.split('\n')
             for row in rows:
                 input_columns = row.split('\t')
+                print 'input columns', input_columns
                 if input_columns and len(input_columns) >= len(columns):
+                    # Filter by feature code filters, if given. Can be string or array
+                    if not feature_code_filters:
+                        pass
+                    else:
+                        feature_code_filters_is_string = isinstance(feature_code_filters, basestring)
+                        input_feature_code = input_columns[self._column_to_index['feature_code']]
+                        if not feature_code_filters_is_string and input_feature_code in feature_code_filters:
+                            pass
+                        elif feature_code_filters_is_string and feature_code_filters in input_feature_code:
+                            pass
+                        else:
+                            continue
+
                     data_dict = dict()
                     for column_name in columns:
                         data_dict[column_name] = input_columns[self._column_to_index[column_name]]
@@ -103,7 +122,6 @@ class Geonames():
                             data_dict[column_name] = data_dict[column_name].decode('utf-8')
                     data_rows.append(data_dict)
 
-#
 #        # Aggregate all rows into single array of dicts
 #        data_rows = []
 #        for unzipped_file in unzipped_file_array:
