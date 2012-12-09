@@ -38,7 +38,7 @@ import codecs
 #        return self
 
 
-class GeonamesAPI():
+class Geonames():
     def __init__(self):
         self._base_url = "http://download.geonames.org/export/dump/"
         # _columns must be in the same order as in the data file
@@ -97,7 +97,7 @@ class GeonamesAPI():
                             data_dict[column_name] = None
                         elif column_name in ('latitude', 'longitude'):
                             data_dict[column_name] = float(data_dict[column_name])
-                        elif column_name in ('geonameid', 'elevation', 'dem'):
+                        elif column_name in ('geonameid', 'elevation', 'dem', 'population'):
                             data_dict[column_name] = int(data_dict[column_name])
                         else:
                             data_dict[column_name] = data_dict[column_name].decode('utf-8')
