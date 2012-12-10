@@ -93,7 +93,6 @@ class Geonames():
             rows = unzipped_file.split('\n')
             for row in rows:
                 input_columns = row.split('\t')
-                print 'input columns', input_columns
                 if input_columns and len(input_columns) >= len(columns):
                     # Filter by feature code filters, if given. Can be string or array
                     if not feature_code_filters:
@@ -101,13 +100,12 @@ class Geonames():
                     else:
                         feature_code_filters_is_string = isinstance(feature_code_filters, basestring)
                         input_feature_code = input_columns[self._column_to_index['feature_code']]
-                        if not feature_code_filters_is_string and input_feature_code in feature_code_filters:
+                        if not feature_code_filters_is_string and (input_feature_code in feature_code_filters):
                             pass
-                        elif feature_code_filters_is_string and feature_code_filters in input_feature_code:
+                        elif feature_code_filters_is_string and (feature_code_filters in input_feature_code):
                             pass
                         else:
                             continue
-
                     data_dict = dict()
                     for column_name in columns:
                         data_dict[column_name] = input_columns[self._column_to_index[column_name]]
