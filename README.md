@@ -46,8 +46,11 @@ Get only cities in Bavaria:
 
     data_rows = api.get_all_cities('BV')
 
+<h5>Allowed columns and returned keys</h5>
 The keys in the returned dicts, and the allowed values in the columns array are: 
-['geonameid', 'name', 'asciiname', 'alternatenames', 'latitude', 'longitude', 'feature_class', 'feature_code', 'country_code', 'cc2', 'admin1_code', 'admin2_code', 'admin3_code', 'admin4_code', 'population', 'elevation', 'dem', 'timezone', 'modification_date']
+
+    ['geonameid', 'name', 'asciiname', 'alternatenames', 'latitude', 'longitude', 'feature_class', 'feature_code', 'country_code', 'cc2', 'admin1_code', 'admin2_code', 'admin3_code', 'admin4_code', 'population', 'elevation', 'dem', 'timezone', 'modification_date']
+
 These correspond to the columns listed at: http://download.geonames.org/export/dump/
 
 If you experience any issues, let me know...
